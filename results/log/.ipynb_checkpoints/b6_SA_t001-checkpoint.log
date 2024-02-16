@@ -1,0 +1,49 @@
+2024-02-16 08:29:53 INFO The compiler starts successfully! 
+2024-02-16 08:29:53 INFO Device info: Quadro RTX 8000
+2024-02-16 08:29:53 INFO Hyper Params: input size torch.Size([1, 3, 224, 224]), batch size 32, lr 5e-05
+2024-02-16 08:29:53 INFO Settings: fine-tune epoch 16, max iteration 200, early_stop_check_epoch 2, enable_eary_stop True
+2024-02-16 08:29:53 INFO Original Graph:
+ ((0, 0))placeholder	
+((0, 0)->(1, 0))ViTEmbeddings	((0, 0)->(2, 0))ViTEmbeddings	
+((1, 0)->(1, 1))ViTLayer	((2, 0)->(2, 1))ViTLayer	
+((1, 1)->(1, 2))ViTLayer	((2, 1)->(2, 2))ViTLayer	
+((1, 2)->(1, 3))ViTLayer	((2, 2)->(2, 3))ViTLayer	
+((1, 3)->(1, 4))ViTLayer	((2, 3)->(2, 4))ViTLayer	
+((1, 4)->(1, 5))ViTLayer	((2, 4)->(2, 5))ViTLayer	
+((1, 5)->(1, 6))ViTLayer	((2, 5)->(2, 6))ViTLayer	
+((1, 6)->(1, 7))ViTLayer	((2, 6)->(2, 7))ViTLayer	
+((1, 7)->(1, 8))ViTLayer	((2, 7)->(2, 8))ViTLayer	
+((1, 8)->(1, 9))ViTLayer	((2, 8)->(2, 9))ViTLayer	
+((1, 9)->(1, 10))ViTLayer	((2, 9)->(2, 10))ViTLayer	
+((1, 10)->(1, 11))ViTLayer	((2, 10)->(2, 11))ViTLayer	
+((1, 11)->(1, 12))ViTLayer	((2, 11)->(2, 12))ViTLayer	
+((1, 12)->(1, 13))ViTLayer	((2, 12)->(2, 13))LayerNorm	
+((1, 13)->(1, 14))ViTLayer	((2, 13)->(2, 14))Linear	
+((1, 14)->(1, 15))ViTLayer	
+((1, 15)->(1, 16))ViTLayer	
+((1, 16)->(1, 17))ViTLayer	
+((1, 17)->(1, 18))ViTLayer	
+((1, 18)->(1, 19))ViTLayer	
+((1, 19)->(1, 20))ViTLayer	
+((1, 20)->(1, 21))ViTLayer	
+((1, 21)->(1, 22))ViTLayer	
+((1, 22)->(1, 23))ViTLayer	
+((1, 23)->(1, 24))ViTLayer	
+((1, 24)->(1, 25))LayerNorm	
+((1, 25)->(1, 26))Linear	
+
+2024-02-16 08:29:53 INFO total capacity: 389124633
+2024-02-16 08:29:53 INFO task specific capacity: 
+2024-02-16 08:29:53 INFO Task_id: 1
+Total: 303322132 (individual: 303322132, shared: 0)
+Details:
+	(1, 2): 0
+	(1,): 303322132
+
+2024-02-16 08:29:53 INFO Task_id: 2
+Total: 85802501 (individual: 85802501, shared: 0)
+Details:
+	(1, 2): 0
+	(2,): 85802501
+
+2024-02-16 08:29:53 INFO Load Pamameters from Original Models

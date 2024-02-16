@@ -1,0 +1,115 @@
+2024-02-16 08:08:02 INFO The compiler starts successfully! 
+2024-02-16 08:08:02 INFO Device info: Quadro RTX 8000
+2024-02-16 08:08:02 INFO Hyper Params: input size torch.Size([1, 3, 224, 224]), batch size 32, lr 0.0001
+2024-02-16 08:08:02 INFO Settings: fine-tune epoch 40, max iteration 200, early_stop_check_epoch 5, enable_eary_stop True
+2024-02-16 08:08:02 INFO Original Graph:
+ ((0, 0))placeholder	
+((0, 0)->(1, 0))Conv2d	((0, 0)->(2, 0))Conv2d	
+((1, 0)->(1, 1))BatchNorm2d	((2, 0)->(2, 1))BatchNorm2d	
+((1, 1)->(1, 2))ReLU	((2, 1)->(2, 2))ReLU	
+((1, 2)->(1, 3))MaxPool2d	((2, 2)->(2, 3))MaxPool2d	
+((1, 3)->(1, 4))BasicBlock	((2, 3)->(2, 4))BasicBlock	
+((1, 4)->(1, 5))BasicBlock	((2, 4)->(2, 5))BasicBlock	
+((1, 5)->(1, 6))BasicBlock	((2, 5)->(2, 6))BasicBlock	
+((1, 6)->(1, 7))BasicBlock	((2, 6)->(2, 7))BasicBlock	
+((1, 7)->(1, 8))BasicBlock	((2, 7)->(2, 8))BasicBlock	
+((1, 8)->(1, 9))BasicBlock	((2, 8)->(2, 9))BasicBlock	
+((1, 9)->(1, 10))BasicBlock	((2, 9)->(2, 10))BasicBlock	
+((1, 10)->(1, 11))BasicBlock	((2, 10)->(2, 11))BasicBlock	
+((1, 11)->(1, 12))BasicBlock	((2, 11)->(2, 12))AdaptiveConcatPool	
+((1, 12)->(1, 13))BasicBlock	((2, 12)->(2, 13))Flatten	
+((1, 13)->(1, 14))BasicBlock	((2, 13)->(2, 14))BatchNorm1d	
+((1, 14)->(1, 15))BasicBlock	((2, 14)->(2, 15))Dropout	
+((1, 15)->(1, 16))BasicBlock	((2, 15)->(2, 16))Linear	
+((1, 16)->(1, 17))BasicBlock	((2, 16)->(2, 17))ReLU	
+((1, 17)->(1, 18))BasicBlock	((2, 17)->(2, 18))BatchNorm1d	
+((1, 18)->(1, 19))BasicBlock	((2, 18)->(2, 19))Dropout	
+((1, 19)->(1, 20))AdaptiveConcatPool	((2, 19)->(2, 20))Linear	
+((1, 20)->(1, 21))Flatten	
+((1, 21)->(1, 22))BatchNorm1d	
+((1, 22)->(1, 23))Dropout	
+((1, 23)->(1, 24))Linear	
+((1, 24)->(1, 25))ReLU	
+((1, 25)->(1, 26))BatchNorm1d	
+((1, 26)->(1, 27))Dropout	
+((1, 27)->(1, 28))Linear	
+
+2024-02-16 08:08:02 INFO total capacity: 33529753
+2024-02-16 08:08:02 INFO task specific capacity: 
+2024-02-16 08:08:02 INFO Task_id: 1
+Total: 21822804 (individual: 21822804, shared: 0)
+Details:
+	(1, 2): 0
+	(1,): 21822804
+
+2024-02-16 08:08:02 INFO Task_id: 2
+Total: 11706949 (individual: 11706949, shared: 0)
+Details:
+	(1, 2): 0
+	(2,): 11706949
+
+2024-02-16 08:08:02 INFO Load Pamameters from Original Models
+2024-02-16 08:08:37 INFO Policy settings: initial_temp 100, min_temp 1, alpha 0.99
+2024-02-16 08:08:37 INFO Policy settings: accuracy_tolerence 0.01, n_merge_per_epoch 2, cooling_schedule: exponential, cooling_threshold: 20
+2024-02-16 08:08:37 INFO Finetune Module: 2
+2024-02-16 08:08:37 INFO Baselines Acc: net1: 88.29280103144038%   net2: 70.11589265000136%   
+2024-02-16 08:08:37 INFO Baseline Latency: 7.9926888329080406
+2024-02-16 08:08:37 INFO -------------------------- Optimization Begins ----------------------------------
+2024-02-16 08:08:37 INFO Current iteration: 1/200, Current best latency: 7.9926888329080406
+2024-02-16 08:08:37 INFO Current Temp: 100, Current probability: 0
+2024-02-16 08:08:37 INFO Current number of candidates is 0
+2024-02-16 08:08:37 INFO Current number of generated Graphs: 0, Topologies: 0
+2024-02-16 08:08:37 INFO Optimizing on the Original Graph ...
+2024-02-16 08:08:37 INFO Merging 2:
+    Node1: ((1, 10)->(1, 11))BasicBlock
+    Node2: ((1, 9)->(1, 10))BasicBlock
+2024-02-16 08:08:37 INFO Merging 1:
+    Node1: ((1, 23)->(1, 24))Linear
+    Node2: ((2, 15)->(2, 16))Linear
+2024-02-16 08:08:37 INFO Current abs-Graph:
+ ((0, 0))placeholder	
+((0, 0)->(1, 0))Conv2d	
+((1, 0)->(1, 1))BatchNorm2d	
+((1, 1)->(1, 2))ReLU	
+((1, 2)->(1, 3))MaxPool2d	
+((1, 3)->(1, 4))BasicBlock	
+((1, 4)->(1, 5))BasicBlock	
+((1, 5)->(1, 6))BasicBlock	
+((1, 6)->(1, 7))BasicBlock	
+((1, 7)->(1, 8))BasicBlock	
+((1, 8)->(1, 9))BasicBlock	
+((1, 9)->(1, 11))BasicBlock	
+((1, 11)->(1, 12))BasicBlock	
+((1, 12)->(1, 13))BasicBlock	
+((1, 13)->(1, 14))BasicBlock	
+((1, 14)->(1, 15))BasicBlock	
+((1, 15)->(1, 16))BasicBlock	
+((1, 16)->(1, 17))BasicBlock	
+((1, 17)->(1, 18))BasicBlock	
+((1, 18)->(1, 19))BasicBlock	
+((1, 19)->(1, 20))AdaptiveConcatPool	
+((1, 20)->(1, 21))Flatten	
+((1, 21)->(1, 22))BatchNorm1d	
+((1, 22)->(1, 23))Dropout	
+((1, 23)->(1, 24))Linear	((1, 23)->(2, 16))Linear	
+((1, 24)->(1, 25))ReLU	((2, 16)->(2, 17))ReLU	
+((1, 25)->(1, 26))BatchNorm1d	((2, 17)->(2, 18))BatchNorm1d	
+((1, 26)->(1, 27))Dropout	((2, 18)->(2, 19))Dropout	
+((1, 27)->(1, 28))Linear	((2, 19)->(2, 20))Linear	
+
+2024-02-16 08:08:37 INFO total capacity: 22055769
+2024-02-16 08:08:37 INFO task specific capacity: 
+2024-02-16 08:08:37 INFO Task_id: 1
+Total: 21527380 (individual: 536084, shared: 20991296)
+Details:
+	(1, 2): 20991296
+	(1,): 536084
+
+2024-02-16 08:08:37 INFO Task_id: 2
+Total: 21519685 (individual: 528389, shared: 20991296)
+Details:
+	(1, 2): 20991296
+	(2,): 528389
+
+2024-02-16 08:08:37 INFO Load Pamameters from Original Models
+2024-02-16 08:08:37 INFO Finetune start ...

@@ -1,0 +1,50 @@
+2024-02-16 08:36:42 INFO The compiler starts successfully! 
+2024-02-16 08:36:42 INFO Device info: Quadro RTX 8000
+2024-02-16 08:36:42 INFO Hyper Params: input size torch.Size([1, 128]), batch size 32, lr 5e-05
+2024-02-16 08:36:42 INFO Settings: fine-tune epoch 16, max iteration 200, early_stop_check_epoch 2, enable_eary_stop True
+2024-02-16 08:36:42 INFO Original Graph:
+ ((0, 0))placeholder	
+((0, 0)->(1, 0))BertEmbeddings	((0, 0)->(2, 0))BertEmbeddings	
+((1, 0)->(1, 1))BertLayer	((2, 0)->(2, 1))BertLayer	
+((1, 1)->(1, 2))BertLayer	((2, 1)->(2, 2))BertLayer	
+((1, 2)->(1, 3))BertLayer	((2, 2)->(2, 3))BertLayer	
+((1, 3)->(1, 4))BertLayer	((2, 3)->(2, 4))BertLayer	
+((1, 4)->(1, 5))BertLayer	((2, 4)->(2, 5))BertLayer	
+((1, 5)->(1, 6))BertLayer	((2, 5)->(2, 6))BertLayer	
+((1, 6)->(1, 7))BertLayer	((2, 6)->(2, 7))BertLayer	
+((1, 7)->(1, 8))BertLayer	((2, 7)->(2, 8))BertLayer	
+((1, 8)->(1, 9))BertLayer	((2, 8)->(2, 9))BertLayer	
+((1, 9)->(1, 10))BertLayer	((2, 9)->(2, 10))BertLayer	
+((1, 10)->(1, 11))BertLayer	((2, 10)->(2, 11))BertLayer	
+((1, 11)->(1, 12))BertLayer	((2, 11)->(2, 12))BertLayer	
+((1, 12)->(1, 13))BertLayer	((2, 12)->(2, 13))BertPooler	
+((1, 13)->(1, 14))BertLayer	((2, 13)->(2, 14))Dropout	
+((1, 14)->(1, 15))BertLayer	((2, 14)->(2, 15))Linear	
+((1, 15)->(1, 16))BertLayer	
+((1, 16)->(1, 17))BertLayer	
+((1, 17)->(1, 18))BertLayer	
+((1, 18)->(1, 19))BertLayer	
+((1, 19)->(1, 20))BertLayer	
+((1, 20)->(1, 21))BertLayer	
+((1, 21)->(1, 22))BertLayer	
+((1, 22)->(1, 23))BertLayer	
+((1, 23)->(1, 24))BertLayer	
+((1, 24)->(1, 25))BertPooler	
+((1, 25)->(1, 26))Dropout	
+((1, 26)->(1, 27))Linear	
+
+2024-02-16 08:36:42 INFO total capacity: 441893124
+2024-02-16 08:36:42 INFO task specific capacity: 
+2024-02-16 08:36:42 INFO Task_id: 1
+Total: 333581314 (individual: 333581314, shared: 0)
+Details:
+	(1, 2): 0
+	(1,): 333581314
+
+2024-02-16 08:36:42 INFO Task_id: 2
+Total: 108311810 (individual: 108311810, shared: 0)
+Details:
+	(1, 2): 0
+	(2,): 108311810
+
+2024-02-16 08:36:42 INFO Load Pamameters from Original Models

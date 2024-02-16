@@ -1,0 +1,155 @@
+2024-02-16 07:55:34 INFO The compiler starts successfully! 
+2024-02-16 07:55:34 INFO Device info: Quadro RTX 8000
+2024-02-16 07:55:34 INFO Hyper Params: input size torch.Size([1, 3, 224, 224]), batch size 32, lr 0.001
+2024-02-16 07:55:34 INFO Settings: fine-tune epoch 35, max iteration 200, early_stop_check_epoch 5, enable_eary_stop True
+2024-02-16 07:55:34 INFO Original Graph:
+ ((0, 0))placeholder	
+((0, 0)->(1, 0))Conv2d	((0, 0)->(2, 0))Conv2d	((0, 0)->(3, 0))Conv2d	
+((1, 0)->(1, 1))ReLU	((2, 0)->(2, 1))ReLU	((3, 0)->(3, 1))ReLU	
+((1, 1)->(1, 2))Conv2d	((2, 1)->(2, 2))Conv2d	((3, 1)->(3, 2))Conv2d	
+((1, 2)->(1, 3))ReLU	((2, 2)->(2, 3))ReLU	((3, 2)->(3, 3))ReLU	
+((1, 3)->(1, 4))MaxPool2d	((2, 3)->(2, 4))MaxPool2d	((3, 3)->(3, 4))MaxPool2d	
+((1, 4)->(1, 5))Conv2d	((2, 4)->(2, 5))Conv2d	((3, 4)->(3, 5))Conv2d	
+((1, 5)->(1, 6))ReLU	((2, 5)->(2, 6))ReLU	((3, 5)->(3, 6))ReLU	
+((1, 6)->(1, 7))Conv2d	((2, 6)->(2, 7))Conv2d	((3, 6)->(3, 7))Conv2d	
+((1, 7)->(1, 8))ReLU	((2, 7)->(2, 8))ReLU	((3, 7)->(3, 8))ReLU	
+((1, 8)->(1, 9))MaxPool2d	((2, 8)->(2, 9))MaxPool2d	((3, 8)->(3, 9))MaxPool2d	
+((1, 9)->(1, 10))Conv2d	((2, 9)->(2, 10))Conv2d	((3, 9)->(3, 10))Conv2d	
+((1, 10)->(1, 11))ReLU	((2, 10)->(2, 11))ReLU	((3, 10)->(3, 11))ReLU	
+((1, 11)->(1, 12))Conv2d	((2, 11)->(2, 12))Conv2d	((3, 11)->(3, 12))Conv2d	
+((1, 12)->(1, 13))ReLU	((2, 12)->(2, 13))ReLU	((3, 12)->(3, 13))ReLU	
+((1, 13)->(1, 14))Conv2d	((2, 13)->(2, 14))Conv2d	((3, 13)->(3, 14))Conv2d	
+((1, 14)->(1, 15))ReLU	((2, 14)->(2, 15))ReLU	((3, 14)->(3, 15))ReLU	
+((1, 15)->(1, 16))MaxPool2d	((2, 15)->(2, 16))MaxPool2d	((3, 15)->(3, 16))MaxPool2d	
+((1, 16)->(1, 17))Conv2d	((2, 16)->(2, 17))Conv2d	((3, 16)->(3, 17))Conv2d	
+((1, 17)->(1, 18))ReLU	((2, 17)->(2, 18))ReLU	((3, 17)->(3, 18))ReLU	
+((1, 18)->(1, 19))Conv2d	((2, 18)->(2, 19))Conv2d	((3, 18)->(3, 19))Conv2d	
+((1, 19)->(1, 20))ReLU	((2, 19)->(2, 20))ReLU	((3, 19)->(3, 20))ReLU	
+((1, 20)->(1, 21))Conv2d	((2, 20)->(2, 21))Conv2d	((3, 20)->(3, 21))Conv2d	
+((1, 21)->(1, 22))ReLU	((2, 21)->(2, 22))ReLU	((3, 21)->(3, 22))ReLU	
+((1, 22)->(1, 23))MaxPool2d	((2, 22)->(2, 23))MaxPool2d	((3, 22)->(3, 23))MaxPool2d	
+((1, 23)->(1, 24))Conv2d	((2, 23)->(2, 24))Conv2d	((3, 23)->(3, 24))Conv2d	
+((1, 24)->(1, 25))ReLU	((2, 24)->(2, 25))ReLU	((3, 24)->(3, 25))ReLU	
+((1, 25)->(1, 26))Conv2d	((2, 25)->(2, 26))Conv2d	((3, 25)->(3, 26))Conv2d	
+((1, 26)->(1, 27))ReLU	((2, 26)->(2, 27))ReLU	((3, 26)->(3, 27))ReLU	
+((1, 27)->(1, 28))Conv2d	((2, 27)->(2, 28))Conv2d	((3, 27)->(3, 28))Conv2d	
+((1, 28)->(1, 29))ReLU	((2, 28)->(2, 29))ReLU	((3, 28)->(3, 29))ReLU	
+((1, 29)->(1, 30))MaxPool2d	((2, 29)->(2, 30))MaxPool2d	((3, 29)->(3, 30))MaxPool2d	
+((1, 30)->(1, 31))FC	((2, 30)->(2, 31))FC	((3, 30)->(3, 31))FC	
+((1, 31)->(1, 32))FC	((2, 31)->(2, 32))FC	((3, 31)->(3, 32))FC	
+((1, 32)->(1, 33))ReLU	((2, 32)->(2, 33))ReLU	((3, 32)->(3, 33))ReLU	
+((1, 33)->(1, 34))Dropout	((2, 33)->(2, 34))Dropout	((3, 33)->(3, 34))Dropout	
+((1, 34)->(1, 35))FC	((2, 34)->(2, 35))FC	((3, 34)->(3, 35))FC	
+((1, 35)->(1, 36))ReLU	((2, 35)->(2, 36))ReLU	((3, 35)->(3, 36))ReLU	
+((1, 36)->(1, 37))Dropout	((2, 36)->(2, 37))Dropout	((3, 36)->(3, 37))Dropout	
+((1, 37)->(1, 38))Linear	((2, 37)->(2, 38))Linear	((3, 37)->(3, 38))Linear	
+
+2024-02-16 07:55:34 INFO total capacity: 402851281
+2024-02-16 07:55:34 INFO task specific capacity: 
+2024-02-16 07:55:34 INFO Task_id: 1
+Total: 134289223 (individual: 134289223, shared: 0)
+Details:
+	(1, 2, 3): 0
+	(1,): 134289223
+
+2024-02-16 07:55:34 INFO Task_id: 2
+Total: 134293320 (individual: 134293320, shared: 0)
+Details:
+	(1, 2, 3): 0
+	(2,): 134293320
+
+2024-02-16 07:55:34 INFO Task_id: 3
+Total: 134268738 (individual: 134268738, shared: 0)
+Details:
+	(1, 2, 3): 0
+	(3,): 134268738
+
+2024-02-16 07:55:34 INFO Load Pamameters from Original Models
+2024-02-16 07:56:30 INFO Policy settings: initial_temp 100, min_temp 1, alpha 0.99
+2024-02-16 07:56:30 INFO Policy settings: accuracy_tolerence 0.01, n_merge_per_epoch 2, cooling_schedule: exponential, cooling_threshold: 20
+2024-02-16 07:56:30 INFO Finetune Module: 1
+2024-02-16 07:56:30 INFO Baselines Acc: net1: 69.82446312904358%   net2: 66.4250135421753%   net3: 79.13705706596375%   
+2024-02-16 07:56:30 INFO Baseline Latency: 11.642493035954734
+2024-02-16 07:56:30 INFO -------------------------- Optimization Begins ----------------------------------
+2024-02-16 07:56:30 INFO Current iteration: 1/200, Current best latency: 11.642493035954734
+2024-02-16 07:56:30 INFO Current Temp: 100, Current probability: 0
+2024-02-16 07:56:30 INFO Current number of candidates is 0
+2024-02-16 07:56:30 INFO Current number of generated Graphs: 0, Topologies: 0
+2024-02-16 07:56:30 INFO Optimizing on the Original Graph ...
+2024-02-16 07:56:30 INFO Merging 1:
+    Node1: ((3, 23)->(3, 24))Conv2d
+    Node2: ((2, 20)->(2, 21))Conv2d
+2024-02-16 07:56:30 INFO Insert transform at node2, node1 torch.Size([1, 512, 14, 14]), node2 torch.Size([1, 512, 28, 28])
+2024-02-16 07:56:30 INFO Merging 1:
+    Node1: ((2, 30)->(2, 31))FC
+    Node2: ((1, 30)->(1, 31))FC
+2024-02-16 07:56:30 INFO Current abs-Graph:
+ ((0, 0))placeholder	
+((0, 0)->(3, 0))Conv2d	
+((3, 0)->(3, 1))ReLU	
+((3, 1)->(3, 2))Conv2d	
+((3, 2)->(3, 3))ReLU	
+((3, 3)->(3, 4))MaxPool2d	
+((3, 4)->(3, 5))Conv2d	
+((3, 5)->(3, 6))ReLU	
+((3, 6)->(3, 7))Conv2d	
+((3, 7)->(3, 8))ReLU	
+((3, 8)->(3, 9))MaxPool2d	
+((3, 9)->(3, 10))Conv2d	
+((3, 10)->(3, 11))ReLU	
+((3, 11)->(3, 12))Conv2d	
+((3, 12)->(3, 13))ReLU	
+((3, 13)->(3, 14))Conv2d	
+((3, 14)->(3, 15))ReLU	
+((3, 15)->(3, 16))MaxPool2d	
+((3, 16)->(3, 17))Conv2d	
+((3, 17)->(3, 18))ReLU	
+((3, 18)->(3, 19))Conv2d	
+((3, 19)->(3, 20))ReLU	
+((3, 20)->(3, 21))Conv2d	
+((3, 21)->(3, 22))ReLU	
+((3, 22)->(3, 23))MaxPool2d	
+((3, 23)->(3, 24))Conv2d	((3, 23)->(2, 39))InsertNode	
+((3, 24)->(3, 25))ReLU	((2, 39)->(2, 21))Conv2d	
+((3, 25)->(3, 26))Conv2d	((2, 21)->(2, 22))ReLU	
+((3, 26)->(3, 27))ReLU	((2, 22)->(2, 23))MaxPool2d	
+((3, 27)->(3, 28))Conv2d	((2, 23)->(2, 24))Conv2d	
+((3, 28)->(3, 29))ReLU	((2, 24)->(2, 25))ReLU	
+((3, 29)->(3, 30))MaxPool2d	((2, 25)->(2, 26))Conv2d	
+((3, 30)->(3, 31))FC	((2, 26)->(2, 27))ReLU	
+((3, 31)->(3, 32))FC	((2, 27)->(2, 28))Conv2d	
+((3, 32)->(3, 33))ReLU	((2, 28)->(2, 29))ReLU	
+((3, 33)->(3, 34))Dropout	((2, 29)->(2, 30))MaxPool2d	
+((3, 34)->(3, 35))FC	((2, 30)->(2, 31))FC	((2, 30)->(1, 31))FC	
+((3, 35)->(3, 36))ReLU	((2, 31)->(2, 32))FC	((1, 31)->(1, 32))FC	
+((3, 36)->(3, 37))Dropout	((2, 32)->(2, 33))ReLU	((1, 32)->(1, 33))ReLU	
+((3, 37)->(3, 38))Linear	((2, 33)->(2, 34))Dropout	((1, 33)->(1, 34))Dropout	
+((2, 34)->(2, 35))FC	((1, 34)->(1, 35))FC	
+((2, 35)->(2, 36))ReLU	((1, 35)->(1, 36))ReLU	
+((2, 36)->(2, 37))Dropout	((1, 36)->(1, 37))Dropout	
+((2, 37)->(2, 38))Linear	((1, 37)->(1, 38))Linear	
+
+2024-02-16 07:56:30 INFO total capacity: 382861137
+2024-02-16 07:56:30 INFO task specific capacity: 
+2024-02-16 07:56:30 INFO Task_id: 1
+Total: 136649031 (individual: 119574535, shared: 17074496)
+Details:
+	(1, 2, 3): 7635264
+	(1, 2): 9439232
+	(1,): 119574535
+
+2024-02-16 07:56:30 INFO Task_id: 2
+Total: 136653128 (individual: 119578632, shared: 17074496)
+Details:
+	(1, 2, 3): 7635264
+	(1, 2): 9439232
+	(2,): 119578632
+
+2024-02-16 07:56:30 INFO Task_id: 3
+Total: 134268738 (individual: 126633474, shared: 7635264)
+Details:
+	(1, 2, 3): 7635264
+	(3,): 126633474
+
+2024-02-16 07:56:30 INFO Load Pamameters from Original Models
+2024-02-16 07:56:31 INFO Finetune start ...
