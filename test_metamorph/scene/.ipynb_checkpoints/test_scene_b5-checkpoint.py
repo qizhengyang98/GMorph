@@ -202,7 +202,7 @@ else:
     )
 
 # trace the training loss and acc drop on val data
-compiler.record_acc_drop_and_loss(trace_loss_acc_loc, trace_loss_acc_file)
+# compiler.record_acc_drop_and_loss(trace_loss_acc_loc, trace_loss_acc_file)
 # policy.record_history(save_history)
 
 print("compiler is set! Start compiling ...\n") 
@@ -214,9 +214,9 @@ print('---------------------------- Evaluation ---------------------------------
 print("Optimal Graph: \n", best_result.graph)
 print("Optimal Latency: ", best_result.latency)
 
-if args.policy_select=='SimulatedAnnealing':
-    policy.export_merge_history(save_history)
-    policy.save_analyze(save_analyze)
+# if args.policy_select=='SimulatedAnnealing':
+#     policy.export_merge_history(save_history)
+#     policy.save_analyze(save_analyze)
 
 cmpGraph_opt = best_result.cmp_graph
 print("Task Accuracy of optimized graph: ")

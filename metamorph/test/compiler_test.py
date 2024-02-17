@@ -166,8 +166,8 @@ def main():
         )
 
     # trace the training loss and acc drop on val data
-    compiler.record_acc_drop_and_loss(trace_loss_acc_loc, trace_loss_acc_file)
-    policy.record_history(save_history)
+    # compiler.record_acc_drop_and_loss(trace_loss_acc_loc, trace_loss_acc_file)
+    # policy.record_history(save_history)
 
     best_result = compiler.optimize(policy)
     print("Optimal Graph: \n", best_result.graph)
@@ -175,9 +175,9 @@ def main():
 
     best_model = best_result.cmp_graph
 
-    if args.policy_select=='SimulatedAnnealing':
-        policy.export_merge_history(save_history)
-        policy.save_analyze(save_analyze)
+    # if args.policy_select=='SimulatedAnnealing':
+    #     policy.export_merge_history(save_history)
+    #     policy.save_analyze(save_analyze)
     if best_model is not None and if_save_model:
         torch.save(best_model, save_model)
         test(test_loader, best_model, device)
