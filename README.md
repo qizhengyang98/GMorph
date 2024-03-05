@@ -49,6 +49,7 @@ To run all the benchmarks and reproduce the results in the experiments, firstly 
 Then we can Run GMorph for different benchmarks and generate well-trained multi-task models.
 
 There are several shell scripts named *submit_xxx.sh* under the root directory, which are used to evaluate different benchmarks in this experiment. We will execute the shell scripts with proper arguments. The script *figure7table5.sh* is used to reproduce the results in Figure7, and the script *figure8.sh* is used to reproduce the results in Figure8 and Table5.
+
 Under the *benchmark_scripts* folder, there are also separate scripts provided to run all the experiments for each benchmark without manually changing arguments, and which script corresponds to which experiment is written in the script *figure7table5.sh*.
 
 There are some useful configurations on some arguments:
