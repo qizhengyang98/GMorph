@@ -38,7 +38,9 @@ python test.py
 If the computation graph of models is printed successfully, then installation is done.
 
 ## Run benchmarks
-To run all the benchmarks and reproduce the results in the experiments, firstly download datasets and pre-trained single-task models from [Google Drive](https://drive.google.com/drive/folders/1Dtvd5eIDeDiseCAwCrj3_wrqjWsy3bq3?usp=sharing), put them under the corresponding folders:
+To run all the benchmarks and reproduce the results in the experiments, firstly prepare the necessary datasets and pre-trained single-task models.
+
+You can simply run the script *prepare\_ds\_mod.sh* which prepares all datasets and models automatically, or manually download datasets and pre-trained single-task models from [Google Drive](https://drive.google.com/drive/folders/1Dtvd5eIDeDiseCAwCrj3_wrqjWsy3bq3?usp=sharing) and put them under the corresponding folders:
 - Put *datasets.zip* under the root directory and unzip it. There should be four folders under datasets: adience, ESOS, fer2013, VOCDetection;
 - Put *salientNet.model*, *salientNet_vgg16.model*, *objectNet.model* under *test_metamorph/scene/pre_models*;
 - Put *EmotionNet.model*, *EmotionNet_vgg13.model*, *ageNet.model*, *genderNet.model*, *genderNet_vgg11.model* under *test_metamorph/face/pre_models*;
