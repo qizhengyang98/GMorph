@@ -4,9 +4,13 @@ AI-powered applications often involve multiple deep neural network (DNN)-based p
 # Description
 ## Structure
 The folder "metamorph" contains all the source codes of GMorph. The folder "test_metamorph" contains the codes of all the benchmarks listed in the paper. The folder results is where all the log results will be stored. A "datasets" folder should be downloaded and placed under the root directory, which contains all the datasets used in the experiments.
+## Dependencies
+For hardware dependencies, CPU with 6 cores, 16G RAM, and a GPU (10G vRAM for benchmark-1,4,5, 20G for benchmark-2,3,6,7 are recommended).
+For software dependencies, Linux OS, Python=3.8, and several Python packages listed in the *requirements.txt*.
+The environment used in the paper: Ubuntu 20.04 LTS, NVIDIA Quadro RTX 8000 GPU.
 ## Environments and Set-up
 Necessary dependencies are listed in the requirements.txt. A Conda environment is recommended for installation.
-To set up the enrironments, firstly clone the repository. Go to the root folder and create a conda environment:
+To set up the environments, firstly clone the repository. Go to the root folder and create a conda environment:
 ```
 conda create -n gmorph python=3.8 ;
 conda activate gmorph 
@@ -38,7 +42,8 @@ To run all the benchmarks and reproduce the results in the experiments, firstly 
 - Put *cola.zip*, *sst2.zip*, *multiclass.zip*, *salient.zip* under *test_metamorph/transformer_model* and unzip them.
 
 Then we can Run GMorph for different benchmarks and generate well-trained multi-task models.
-Under the GMorph folder, there are several shell scripts named submit_xxx.sh, which are used to evaluate different benchmarks in this experiment. What we need is to run the commands in the files, and modify the arguments if necessary.
+There are several shell scripts named *submit_xxx.sh* under the root directory, which are used to evaluate different benchmarks in this experiment. We will execute the shell scripts with proper arguments. The script *figure7table5.sh* is used to reproduce the results in Figure7, and the script *figure8.sh* is used to reproduce the results in Figure8 and Table5.
+Under the *benchmark_scripts* folder, there are also separate scripts provided to run all the experiments for each benchmark without manually changing arguments, and which script corresponds to which experiment is written in the script *figure7table5.sh*.
 There are some useful configurations on some arguments:
 - policy_select: set *SimulatedAnnealing* when testing *GMorph*, set *LCBased* when testing *GMorph w P* and *GMorph w P+R*.
 - log_name: the name of the log file, which saves useful intermediate information when GMorph is running.
@@ -47,4 +52,23 @@ There are some useful configurations on some arguments:
 
 Other arguments and flags do not need to be changed during evaluations. Note that the arguments of *batch_size* and *num_workers* can be smaller if GPU memory is not enough.
 
+For different benchmark-n, run *submit_bn.sh*, and modify the flags or arguments as shown above. To run experiments without manually changing flags or arguments, go to the *benchmark_scripts* directory and run corresponding scripts. 
+
+## Reproduce results
+To reproduce the results shown in Figure7,8 and Table5, run scripts *figure7table5.sh* and *figure8.sh* accordingly. Note that running these scripts can be time-consuming, which basically runs all the experiments for all the benchmarks, so an alternative way is to run each experiment separately given the comments in the scripts.
+
 When the shell script or commands inside are running, a corresponding log file will be generated under *results/log*. The log will record the architecture of the model, the accuracy and latency of the model, and the overall search time at the end of each iteration. Note that since GMorph is based on a random algorithm, the outcomes during the model searching and the final multi-task models may be similar but not exactly the same between different runs. It would be better to run each benchmark multiple times to generate multiple logs to minimize the influence of randomness.
+
+To reproduce the results in Table4, run the shell script *table4.sh*, the latency of all-shared models and multi-task models found by TreeMTL in benchmark 1-4 will be printed. 
+To reproduce the results in Table3, run the shell script *table3.sh*, the model architectures found by GMorph will be compiled by both PyTorch and TensorRT automatically, and the results, which are the latency of the models, will be printed. 12G GPU memory is needed for benchmark-6 and 15G is needed for benchmark-7.
+
+# Citation
+Welcome to cite our work if you find it helpful to your research
+```
+@article{gmorph2024,
+  title={GMorph: Accelerating Multi-DNN Inference via Model Fusion},
+  author={Yang, Qizheng and Yang, Tianyi and Xiang, Mingcan and Zhang, Lijun and Wang, Haoliang and Serafini, Marco and Guan, Hui},
+  journal={Proceedings of Nineteenth European Conference on Computer Systems}
+  year={2024}
+}
+```
