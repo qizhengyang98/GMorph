@@ -14,6 +14,9 @@ def task_share_combinations(num_task):
         task_share_pattern += list(itertools.combinations(task_list, i))
     return task_share_pattern
 
+"""
+Used to analyze data in the generated logs
+"""
 class LogParser:
     DATE_LEN = 10
     TIME_LEN = 8

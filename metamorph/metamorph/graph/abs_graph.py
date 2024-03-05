@@ -22,7 +22,7 @@ GraphHash = int
 TopoHash = int
 
 @dataclass
-class TaskCapacity:
+class TaskCapacity: # the capacity of each task/model
     task_id: int
     total: int
     shared: int
@@ -140,12 +140,15 @@ class Node:
         return new_node
 
     def requires_grad_(self, requires_grad=True):
+        # whether or not the node needs to update gradient during training
         self.requires_grad = requires_grad
     
     def requires_flatten_(self, requires_flatten=True):
+        # whether or not the node needs to flatten the input tensor
         self.requires_flatten = requires_flatten
         
     def requires_squeeze_(self, requires_squeeze=True):
+        # whether or not the node needs to reshape the input tensor
         self.requires_squeeze = requires_squeeze
 
     def locate(self, op_idx: NodeIndex, operator: Union[nn.Module, str]) -> None:
@@ -215,7 +218,7 @@ class Graph:
     def __str__(self) -> str:
         stack = [self.root]
         ret = ''
-        while stack:
+        while stack: # trace the graph with DFS
             for _ in range(len(stack)):
                 cur_node = stack.pop(0)
                 ret += str(cur_node) + '\t'
@@ -287,6 +290,7 @@ class Graph:
     def __deepcopy__(self, memo) -> Graph:
         return self.__copy__()
 
+    # parse the models, and build abstract graph
     def add_model(self, mod_idx: int, model: List[nn.Module]) -> None:
         cur_node = self.root
         cur_output = self.sample_input
@@ -297,7 +301,7 @@ class Graph:
             input_size = cur_output.shape
             try:
                 cur_output = layer(cur_output) # update the current output
-            except RuntimeError:
+            except RuntimeError: # input shape does not match the weight, need a flatten layer
                 print(f"Encountered an error at {new_node.op_index}. Try to insert a nn.Flatten layer ... ", end = "")
                 flatten = nn.Flatten()
                 cur_output = layer(flatten(cur_output))
@@ -311,7 +315,8 @@ class Graph:
             cur_node = new_node
             cur_idx += 1
         self.last_op_idx[mod_idx] = cur_idx - 1
-        
+    
+    # parse the model and build abstract graph for transformer-based models
     def add_model_transformer(self, mod_idx: int, model: List[nn.Module]) -> None:
         cur_node = self.root
         cur_output = self.sample_input
@@ -324,13 +329,13 @@ class Graph:
                 cur_output = layer(cur_output) # update the current output
                 if isinstance(cur_output, Tuple):
                     cur_output = cur_output[0]
-            except RuntimeError:
+            except RuntimeError: # input shape does not match the weight, need a flatten layer
                 print(f"Encountered an error at {new_node.op_index}. Try to insert a nn.Flatten layer ... ", end = "")
                 flatten = nn.Flatten()
                 cur_output = layer(flatten(cur_output))
                 print("Success!")
                 new_node.requires_flatten_()
-            if isinstance(layer, nn.Linear):
+            if isinstance(layer, nn.Linear): # need to reshape inputs for some encoders
                 new_node.requires_squeeze_()
             output_size = cur_output.shape
             new_node.set_io_sizes(input_size, output_size)
@@ -341,21 +346,23 @@ class Graph:
             cur_idx += 1
         self.last_op_idx[mod_idx] = cur_idx - 1
 
+    # Determine and group nodes that can be merged and store them in a Dict
     def build_mergeable_nodes(self) -> None:
         self.mergeable_nodes = defaultdict(list)
         self.relaxed_mergeable_nodes = None
         stack = [self.root]
-        while stack:
+        while stack: # DFS Traverse the abs-graph, build mergeable nodes without relaxing
             cur_node = stack.pop(0)
             if cur_node.children:
                 stack.extend(cur_node.children)
             if cur_node.op_type not in Graph.UNMERGEABLE_NODES:
                 key = cur_node.input_signature()
                 self.mergeable_nodes[key].append(cur_node)
+        # build mergeable nodes with relaxing
         if self.use_transformer:
-            avail_relax_dim = ['hw']
+            avail_relax_dim = ['hw'] # only relax on height and width dim
         else:
-            avail_relax_dim = ['hw', 'c']
+            avail_relax_dim = ['hw', 'c'] # relax on height, width, and channel dim
         for relax_dim in avail_relax_dim: # add 'chw'
             self.build_relaxed_mergeable_nodes(relax_dim)
 
@@ -373,7 +380,7 @@ class Graph:
             if not self.relaxed_mergeable_nodes:
                 self.relaxed_mergeable_nodes = defaultdict(list)
             stack = [self.root]
-            while stack:
+            while stack: # DFS
                 cur_node = stack.pop(0)
                 if cur_node.children:
                     stack.extend(cur_node.children)
@@ -394,6 +401,8 @@ class Graph:
                         # pass
                     self.relaxed_mergeable_nodes[key].append(cur_node)
     
+    # record the capacity of each node and the entire graph
+    # return the capacity of multi-task model and the capacity of each task
     def capacity(self) -> Tuple[int, List[TaskCapacity]]:
         def capacity_inner(root: Node, cur_capacity: int) -> Tuple[int, List[TaskCapacity]]:
             cur_node = root
@@ -485,6 +494,7 @@ class Graph:
                     logging.info(merge_info)
                     self.merge_nodes(node1, node2, direction, relation)
 
+    # merge two nodes without any constraint
     def force_connect(self, merge_config: MergeConfig) -> None:
         node1, node2 = None, None
 
@@ -504,6 +514,7 @@ class Graph:
         else:
             raise ValueError('Invalid nodes index')
 
+    # manually connect two node given config, for debug purpose
     def manual_connect(self, merge_config: MergeConfig, verbose=False) -> Optional[MergeConfig]:
         node1, node2 = None, None
         for n in self.mergeable_nodes[merge_config.input_sig]:
@@ -532,9 +543,10 @@ class Graph:
         else:
             raise ValueError('Invalid nodes index')
 
+    # randomly select nodes from mergeable_nodes and merge them
     def random_connect(self, n_trial=10, verbose=False) -> Optional[MergeConfig]:
         counter = 0
-        while counter < n_trial:
+        while counter < n_trial: # find nodes from the Dict. Timeout if no node is selected.
             n_nodes = 0
             keys = [key for key in self.mergeable_nodes.keys() if len(self.mergeable_nodes[key]) > 1]
 
@@ -552,6 +564,7 @@ class Graph:
                 nodes = self.mergeable_nodes[keys[rand_key]]
                 n_nodes = len(nodes)
 
+            # randomly select mergeable nodes
             node1_idx, node2_idx = np.random.choice(range(n_nodes), size=2, replace=False)
             node1, node2 = nodes[node1_idx], nodes[node2_idx]
 
@@ -598,9 +611,10 @@ class Graph:
         new_node.children.append(cur_node)
         cur_node.parent = new_node
     
+    # randomly select nodes from relaxed_mergeable_nodes and merge them
     def relaxed_random_connect(self, n_trial=10, verbose=False) -> Optional[MergeConfig]:
         counter = 0
-        while counter < n_trial:
+        while counter < n_trial: # find nodes from the Dict. Timeout if no node is selected.
             n_nodes = 0
             keys = [key for key in self.relaxed_mergeable_nodes.keys() if len(self.relaxed_mergeable_nodes[key]) > 1]
             if len(keys) == 0:
@@ -617,7 +631,7 @@ class Graph:
             # Prevent merging when two nodes are from the same branch
             # condition2 = node1.op_index[0] != node2.op_index[0]
             if condition1:
-                direction, relation = self.infer_direction_relation(node1, node2)
+                direction, relation = self.infer_direction_relation(node1, node2) # determine the merge direction
                 if direction == Direction.NOT_VALID:
                     continue
                 else:
@@ -719,6 +733,7 @@ class Graph:
         else:
             return Direction.NOT_VALID, relation
     
+    # check whether there is dependency between two node given a merge direction
     def check_dependency(self, node1: Node, node2: Node, direction: Direction, relation: Relation) -> bool:
         if relation == Relation.PARENT_CHILD:
             if direction == Direction.LEFT:
@@ -731,6 +746,7 @@ class Graph:
         else:
             return not self.check_branching_violation(node1, node2, direction)
 
+    # merge two nodes and all their parents
     def merge_nodes(self, node1: Node, node2: Node, direction: Direction, relation: Relation) -> None:
         if direction == Direction.LEFT:
             prev_node, cur_node = node2, node2.parent

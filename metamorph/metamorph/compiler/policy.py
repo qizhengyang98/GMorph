@@ -169,6 +169,7 @@ class SimulatedAnnealingPolicy(Policy):
         logging.info(f'Current number of candidates is {len(self.elite_candidates)}')
         logging.info(f'Current number of generated Graphs: {len(self.exist_graphs)}, Topologies: {len(self.exist_topologies)}')
 
+        # given the probability p, determine optimize on the original graph or multi-task models saved in elite candidates
         if not self.elite_candidates or self.p < random.uniform(0, 1):
             print("Optimizing on the Original Graph ...")
             logging.info("Optimizing on the Original Graph ...")
@@ -187,6 +188,7 @@ class SimulatedAnnealingPolicy(Policy):
                 self.history[cur_epoch*self.n_merge_per_epoch+i].graph_type = 'elite_candidate'
                 self.history[cur_epoch*self.n_merge_per_epoch+i].graph_idx = idx
 
+        # used for reproduce results using the exactly same merging history
         if self.export_history_record:
             self.export_merge_history()
 
@@ -441,6 +443,7 @@ class LCBasedSimulatedAnnealingPolicy(SimulatedAnnealingPolicy):
         logging.info(f'Current number of candidates is {len(self.elite_candidates)}')
         logging.info(f'Current number of generated Graphs: {len(self.exist_graphs)}, Topologies: {len(self.exist_topologies)}')
 
+        # given the probability p, determine optimize on the original graph or multi-task models saved in elite candidates
         if not self.elite_candidates or self.p < random.uniform(0, 1):
             print("Optimizing on the Original Graph ...")
             logging.info("Optimizing on the Original Graph ...")
@@ -485,7 +488,7 @@ class LCBasedSimulatedAnnealingPolicy(SimulatedAnnealingPolicy):
                 logging.info(cap)
 
             cur_cap_feat = cur_graph.export_capacity_numpy()
-            # filter by rule
+            # filter the current model by rule
             if self.enable_filtering_rules and self.filter_by_rules(cur_cap_feat):
                 print('Current abs-graph is filtered according to the filtering rules')
                 logging.critical('Current abs-graph is filtered according to the filtering rules')

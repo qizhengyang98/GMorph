@@ -124,6 +124,7 @@ class MetaMorph:
         
         self.export_tracing_record = False
 
+    # parse models into a list of operators
     def parse_model(self, model: nn.Module) -> List[nn.Module]:
         res = []
         if self.use_transformer:
@@ -163,6 +164,7 @@ class MetaMorph:
         for model in models:
             model = model.cpu()
 
+    # main gmorph process
     def optimize(self, policy: Policy) -> Graph:
         logging.info("-------------------------- Optimization Begins ----------------------------------")
         torch.cuda.synchronize()
@@ -171,11 +173,12 @@ class MetaMorph:
         epoch = 0
         self.result = Result(self.original_graph, policy.latency_baseline, None)
 
+        # keep searching for the best candidate given the policy selected
         while epoch < self.max_epoch and not policy.early_stop():
             print("---------- Epoch: {}/{}, current best latency: {}".format(epoch+1, self.max_epoch, self.result[1]))
             logging.info(f'Current iteration: {epoch+1}/{self.max_epoch}, Current best latency: {self.result[1]}')
             
-            candidate, cand_model = policy.step(epoch)
+            candidate, cand_model = policy.step(epoch) # pocily process
             if candidate:
                 cand_graph, cand_latency = candidate 
                 if not self.result or cand_latency < self.result.latency:
@@ -202,7 +205,9 @@ class MetaMorph:
         logging.info(f'The number of generated graph: {len(policy.exist_graphs)}')
         return self.result
     
+    # fine-tuning process
     def fine_tune(self, cmp_graph: ComputeGraph, accuracy_baseline: torch.Tensor, accuracy_tolerence: float):
+        # # for tracing purpose. Used for debugging and recording intermediate results
         # base_result = [0 for _ in range(len(self.models))]
         task_loss = [nn.L1Loss() for _ in range(len(self.models))]
         trace_init_loss = [999 for _ in range(len(self.models))]
@@ -267,7 +272,7 @@ class MetaMorph:
             trace_avg_loss[e] = [t/count_batch for t in trace_avg_loss[e]]
         trace_after_loss.insert(0, trace_init_loss)
         trace_avg_loss.insert(0, trace_init_loss)
-        if self.export_tracing_record:
+        if self.export_tracing_record: # export the record into files
             self.export_acc_drop_and_loss(trace_after_loss, trace_avg_loss, trace_val_acc_drop)
 
     # fine tune with learning curve extrapolation to early terminate
@@ -337,9 +342,10 @@ class MetaMorph:
                 loop.set_postfix(loss = loss.item())
                 count_batch += 1
 
+    # Learning curve extrapolation
     def est_final_acc_drop(self, acc_list, cur_epoch, target):
         est_n = -1
-        num_base_point = 4
+        num_base_point = 4 # predict based on 4 existing points
         acc_samples = np.array(acc_list)[-num_base_point:]
         n_step = int(np.floor(self.fine_tune_epochs / self.fine_tune_early_stop_check_epoch))
         cur_step = int(np.floor(cur_epoch / self.fine_tune_early_stop_check_epoch))
@@ -379,6 +385,7 @@ class MetaMorph:
                 write = csv.writer(f3)
                 write.writerow([vad[i] for vad in val_acc_drop])
 
+    # sanity check
     def subgraph_finetuning_sanity_check(self, n_connect=1, level=1, load_weight=True):
         logging.info("------------------ Subgraph Finetuning Sanity Check ... ----------------------")
         merged_graph_sub, merged_graph_all = self.get_merged_graph_sanity_check(n_connect, level)

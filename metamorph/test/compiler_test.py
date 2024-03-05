@@ -87,6 +87,7 @@ def main():
         models = load_model(age_num, gen_num, eth_num)
         test_func = test
 
+    # create datasets that contains data and labels for all tasks
     ds_samples = DatasetSampler(
         [train_loader.dataset],
         models,
@@ -100,6 +101,7 @@ def main():
     print(f"the size of training set is {len(ds_samples)}, the size of testing set is {len(test_loader.dataset)}\n")
 
     optimizer = torch.optim.Adam
+    # the compiler of GMorph
     compiler = MetaMorph(
         models=models, optimizer=optimizer, optimizer_lr=0.0005,
         input_size=sample_input.shape, train_loader=train_loader, test_loader=test_loader,
@@ -107,12 +109,13 @@ def main():
         fine_tune_epochs=args.fine_tune_epochs, max_epoch=args.max_iteration, device=device,
         enable_fine_tune_early_stop=args.finetune_early_stop, fine_tune_early_stop_check_epoch=args.early_stop_check_epochs
     )
-
+    # choose to finetune the shared part of multi-task models or the entire models
     if args.sub_graph_finetune:
         fine_tune_level = FinetuneLevel.SUBGRAPH
     else:
         fine_tune_level = FinetuneLevel.FULLGRAPH
 
+    # select a policy given args
     if args.policy_select=='manual':
         policy = ManualSimulatedAnnealingPolicy(
             base_graph=compiler.original_graph,

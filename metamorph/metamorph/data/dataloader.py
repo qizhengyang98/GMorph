@@ -56,6 +56,7 @@ class DatasetSampler:
         dataset_idx = bisect.bisect_right(self.datasets.cumulative_sizes, idx)
         return dataset_idx
 
+    # concat a list of datasets into a new dataset of a given size
     def make_data(self, datasets: List[Dataset], keep_sizes: List[int]) -> Dataset:
         sampled_datasets = []
         for i, dataset in enumerate(datasets):
@@ -65,6 +66,7 @@ class DatasetSampler:
             sampled_datasets.append(keep_dataset)
         return torch.utils.data.ConcatDataset(sampled_datasets)
     
+    # generate labels for all tasks. The labels are generated with pre-trained models
     def generate_labels(self, models: List[nn.Module], use_transformer=False, glue_task=False, preprocess_func=None) -> List[torch.Tensor]:
         dataloader = torch.utils.data.DataLoader(
             self.datasets, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers
@@ -96,6 +98,7 @@ class DatasetSampler:
                 # start = end
         return targets
 
+    # Split train and val set
     def train_test_split(self, train_percent: float) -> Tuple[Dataset, Dataset]:
         assert 0 < train_percent <= 1
         train_size = int(train_percent * len(self.datasets))

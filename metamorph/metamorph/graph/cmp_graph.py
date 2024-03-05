@@ -25,7 +25,7 @@ class Tuple2Tensor(nn.Module):
     def forward(self, x):
         return x[0] if isinstance(x, Tuple) else x
 
-class ComputeNode(nn.Module):
+class ComputeNode(nn.Module): # convert GraphNode into compute-able nodes
     def __init__(self, op: GraphNode, op_index=None):
         super(ComputeNode, self).__init__()
         self.input = 0
@@ -85,7 +85,7 @@ class ComputeGraph(nn.Module):
 
         stack = [graph.root]
         stack_op = [self.mod]
-        while stack:
+        while stack: # traverse an abs-graph using DFS, and build corresponding computation graph
             for _ in range(len(stack)):
                 cur_node = stack.pop(0)
                 cur_op = stack_op.pop(0)
@@ -110,14 +110,14 @@ class ComputeGraph(nn.Module):
                             # tmp_op.requires_grad_()  # fine tune entire graph
                         cur_op.add_next(tmp_op)
                     stack_op.extend(cur_op.next)
-                else:
+                else: # store the sequence of exits of tasks
                     self.out_seq.append(cur_node.op_index[0])
-        self.cmp_graph_sequential()
+        self.cmp_graph_sequential() # convert the ComputeGraph into a nn.Sequential
 
     def __str__(self) -> str:
         stack = [self.mod]
         ret = ''
-        while stack:
+        while stack: # DFS
             for _ in range(len(stack)):
                 cur_op = stack.pop(0)
                 ret += str(cur_op) + '\t'
@@ -126,6 +126,7 @@ class ComputeGraph(nn.Module):
             ret += '\n'
         return ret
 
+    # convert GraphNode into ComputeNode and load weights
     def load_op(self, node, original_models: Union[List[nn.Module], Dict[Tuple[int, int], nn.Module]], load_weight: bool) -> ComputeNode:
         if isinstance(original_models, Dict):
             op = copy.deepcopy(
@@ -145,6 +146,7 @@ class ComputeGraph(nn.Module):
         cmp_node.requires_grad_(node.requires_grad)  # sub-graph fine tuning
         return cmp_node
 
+    # initialize weights if do not load weights from pretrained models
     def init_weight(self, op: nn.Module) -> None:
         op_children = [tmp for tmp in op.children()]
         if len(op_children) == 0:
@@ -159,7 +161,7 @@ class ComputeGraph(nn.Module):
     def train(self, mode=True) -> ComputeGraph:
         self.training = mode
         stack = [self.mod]
-        while stack:
+        while stack: # DFS
             for _ in range(len(stack)):
                 cur_node = stack.pop(0)
                 if cur_node.op != 'placeholder':
@@ -229,13 +231,14 @@ class ComputeGraph(nn.Module):
                     stack.extend(cur_op.next)
         logging.info(f'Node requires grad {req_grad_count}: {grad_info}')
 
+    # convert the ComputeGraph into a nn.Sequential, for faster inference
     def cmp_graph_sequential(self):
         li, li_sub = [], []
         li_in, c_in = [-1], [-1]
         c_child = []
         stack = [self.mod]
         self.out_seq_idx, self.out_op_idx = [], []
-        while stack:
+        while stack: # DFS
             cur_node = stack.pop()
             if cur_node.op == 'placeholder':
                 li_sub.append(cur_node)
@@ -275,10 +278,10 @@ class ComputeGraph(nn.Module):
     def forward(self, x_in: torch.Tensor) -> List[torch.Tensor]:
         # final_result = [0 for _ in self.out_idx]
         final_result = []
-        inter_result = []
+        inter_result = [] # store the intermediate results
 
         # hard code here for BERT
-        if isinstance(x_in, Dict):
+        if isinstance(x_in, Dict): # inference for BERT
             attention_mask = x_in["attention_mask"][:,None, None,:] # extend attention mask
             attention_mask = (1.0 - attention_mask) * torch.finfo(torch.float32).min
             for i, seq in enumerate(self.nnSeq):
@@ -296,7 +299,7 @@ class ComputeGraph(nn.Module):
                 inter_result.append(out)
                 if i in self.out_seq_idx:
                     final_result.append(inter_result[-1])
-        else:
+        else: # for other tasks whose inputs are tensors
             for i, seq in enumerate(self.nnSeq):
                 if self.nnSeq_in[i] == -1:
                     inter_result.append(self.nnSeq[i](x_in))
@@ -309,7 +312,8 @@ class ComputeGraph(nn.Module):
         # return final_result
         return [i for _,i in sorted(zip(self.out_op_idx, final_result))]
 
-
+    # Do inference by traversing and running each ComputeNode 
+    # can be a little bit slower for some overhead
     def forward2(self, x_in: torch.Tensor) -> List[torch.Tensor]:
         stack = [self.mod]
         inter_result = [x_in]
