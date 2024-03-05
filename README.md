@@ -38,9 +38,14 @@ python test.py
 If the computation graph of models is printed successfully, then installation is done.
 
 ## Run benchmarks
+### Preparation
 To run all the benchmarks and reproduce the results in the experiments, firstly prepare the necessary datasets and pre-trained single-task models.
 
-You can simply run the script *prepare\_ds\_mod.sh* which prepares all datasets and models automatically, or manually download datasets and pre-trained single-task models from [Google Drive](https://drive.google.com/drive/folders/1Dtvd5eIDeDiseCAwCrj3_wrqjWsy3bq3?usp=sharing) and put them under the corresponding folders:
+To prepare them automatically, you can simply run the script *prepare\_ds\_mod.sh*, which downloads all datasets and models and puts them under the correct paths, after installing *gdown* package by
+```
+pip install gdown
+```
+Alternatively, you can manually download them from [Google Drive](https://drive.google.com/drive/folders/1Dtvd5eIDeDiseCAwCrj3_wrqjWsy3bq3?usp=sharing) and put them under the corresponding folders:
 - Put *datasets.zip* under the root directory and unzip it. There should be four folders under datasets: adience, ESOS, fer2013, VOCDetection;
 - Put *salientNet.model*, *salientNet_vgg16.model*, *objectNet.model* under *test_metamorph/scene/pre_models*;
 - Put *EmotionNet.model*, *EmotionNet_vgg13.model*, *ageNet.model*, *genderNet.model*, *genderNet_vgg11.model* under *test_metamorph/face/pre_models*;
@@ -48,6 +53,7 @@ You can simply run the script *prepare\_ds\_mod.sh* which prepares all datasets 
 - Put *toy_vgg13.pt* under *metamorph/model*;
 - Put *cola.zip*, *sst2.zip*, *multiclass.zip*, *salient.zip* under *test_metamorph/transformer_model* and unzip them.
 
+### Experiments
 Then we can Run GMorph for different benchmarks and generate well-trained multi-task models.
 
 There are several shell scripts named *submit_xxx.sh* under the root directory, which are used to evaluate different benchmarks in this experiment. We will execute the shell scripts with proper arguments. The script *figure7table5.sh* is used to reproduce the results in Figure7, and the script *figure8.sh* is used to reproduce the results in Figure8 and Table5.
@@ -64,7 +70,7 @@ Other arguments and flags do not need to be changed during evaluations. Note tha
 
 For different benchmark-n, run *submit_bn.sh*, and modify the flags or arguments as shown above. To run experiments without manually changing flags or arguments, go to the *benchmark_scripts* directory and run corresponding scripts. 
 
-## Reproduce results
+### Reproduce results
 To reproduce the results shown in Figure7,8 and Table5, run scripts *figure7table5.sh* and *figure8.sh* accordingly. Note that running these scripts can be time-consuming, which basically runs all the experiments for all the benchmarks, so an alternative way is to run each experiment separately given the comments in the scripts.
 
 When the shell script or commands inside are running, a corresponding log file will be generated under *results/log*. The log will record the architecture of the model, the accuracy and latency of the model, and the overall search time at the end of each iteration. Note that since GMorph is based on a random algorithm, the outcomes during the model searching and the final multi-task models may be similar but not exactly the same between different runs. It would be better to run each benchmark multiple times to generate multiple logs to minimize the influence of randomness.
