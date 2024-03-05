@@ -38,6 +38,7 @@ python test.py
 If the computation graph of models is printed successfully, then installation is done.
 
 ## Run benchmarks
+### Preparation
 To run all the benchmarks and reproduce the results in the experiments, firstly prepare the necessary datasets and pre-trained single-task models.
 
 To prepare them automatically, you can simply run the script *prepare\_ds\_mod.sh*, which downloads all datasets and models and puts them under the correct paths, after installing *gdown* package by
@@ -52,6 +53,7 @@ Alternatively, you can manually download them from [Google Drive](https://drive.
 - Put *toy_vgg13.pt* under *metamorph/model*;
 - Put *cola.zip*, *sst2.zip*, *multiclass.zip*, *salient.zip* under *test_metamorph/transformer_model* and unzip them.
 
+### Experiments
 Then we can Run GMorph for different benchmarks and generate well-trained multi-task models.
 
 There are several shell scripts named *submit_xxx.sh* under the root directory, which are used to evaluate different benchmarks in this experiment. We will execute the shell scripts with proper arguments. The script *figure7table5.sh* is used to reproduce the results in Figure7, and the script *figure8.sh* is used to reproduce the results in Figure8 and Table5.
