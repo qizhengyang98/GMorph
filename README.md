@@ -70,7 +70,7 @@ Other arguments and flags do not need to be changed during evaluations. Note tha
 
 For different benchmark-n, run *submit_bn.sh*, and modify the flags or arguments as shown above. To run experiments without manually changing flags or arguments, go to the *benchmark_scripts* directory and run corresponding scripts. 
 
-## Reproduce results
+### Reproduce results
 To reproduce the results shown in Figure7,8 and Table5, run scripts *figure7table5.sh* and *figure8.sh* accordingly. Note that running these scripts can be time-consuming, which basically runs all the experiments for all the benchmarks, so an alternative way is to run each experiment separately given the comments in the scripts.
 
 When the shell script or commands inside are running, a corresponding log file will be generated under *results/log*. The log will record the architecture of the model, the accuracy and latency of the model, and the overall search time at the end of each iteration. Note that since GMorph is based on a random algorithm, the outcomes during the model searching and the final multi-task models may be similar but not exactly the same between different runs. It would be better to run each benchmark multiple times to generate multiple logs to minimize the influence of randomness.
